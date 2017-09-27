@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  
+<head>
+	<meta charset="UTF-8">
+	<title>Face Analysis</title>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+	<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+  		<video id="video" class="col-md-offset-4 col-md-4 img-responsive"></video>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+      <div class="col-md-offset-5 col-md-2">
+        <button id="startbutton" class="btn btn-primary">Take the picture ;-)</button>
+      </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+      <canvas id="canvas" class="col-md-offset-2 col-md-3 img-responsive"></canvas>
+      <div class="col-md-1"></div>
+      <div class="col-md-5">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h2 class="panel-title">Azure Cognitive Services : Face & Emotion API</h3>
+          </div>
+          <table class="table">
+            <tbody>
+              <tr class="table-striped">
+                <td>Gender</td>
+                <td id="faceGender"></td>
+              </tr>
+              <tr class="table-striped">
+                <td>Age</td>
+                <td id="faceAge"></td>
+              </tr>
+              <tr class="table-striped">
+                <td>Wear glasses ?</td>
+                <td id="faceGlasses"></td>
+              </tr>
+              <tr class="table-striped">
+                <td>Smile ?</td>
+                <td id="faceSmile"></td>
+              </tr>
+              <tr class="table-striped">
+                <td>Emotion</td>
+                <td id="faceEmotion"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    
+    <div class="row">
+        <div class="col-md-offset-2 col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon">@</span>
+              <input type="text" id="email" class="form-control" placeholder="Email">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="feedback" class="form-control" placeholder="Feedback">
+        </div>
+        <div class="col-md-2">
+            <button id="sendbutton" class="btn btn-default">Send feedback</button>
+        </div>
+    </div>
+    
+    
+    
+	</div>
+
+<script>
+(function()
+{
+  let streaming = false;
+  let width = 320;
+  let height = 0;
+  
+  // HTML Element.
+  let video = document.querySelector('#video');
+  let canvas = document.querySelector('#canvas');
+  let startbutton = document.querySelector('#startbutton');
+  let sendbutton = document.querySelector('#sendbutton');
+  let faceGender = $('#faceGender');
+  let faceAge = $('#faceAge');
+  let faceGlasses = $('#faceGlasses');
+  let faceSmile = $('#faceSmile');
+  let faceEmotion = $('#faceEmotion');
+  let email = $('#email');
+  let feedback = $('#feedback');
+      
+  navigator.getMedia = ( navigator.getUserMedia || 
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+                         
+  navigator.getMedia(
+    { 
+      video: true, 
+      audio: false 
+    },
+    function(stream) {
+      if (navigator.mozGetUserMedia) { 
+        video.mozSrcObject = stream;
+      } else {
+        var vendorURL = window.URL || window.webkitURL;
+        video.src = vendorURL.createObjectURL(stream);
+      }
+      video.play();
+    },
+    function(err) {
+      console.log("An error occured! " + err);
+    }
+  );
+  
+  video.addEventListener('canplay', function(ev)
+  {
+    if (!streaming)
+    {
+      height = video.videoHeight / (video.videoWidth/width);
+      video.setAttribute('width', width);
+      video.setAttribute('height', height);
+      canvas.setAttribute('width', width);
+      canvas.setAttribute('height', height);
+      streaming = true;
+    }
+  }, false);
+  
+  /**
+   * Make a binary blob from a picture local URL.
+   */
+  function makeBlobFromPictureUri(picUri)
+  {
+    let BASE64_MARKER = ";base64,";
+    let parts = picUri.split(BASE64_MARKER);
+    let contentType = parts[0].split(':')[1];
+    let raw = window.atob(parts[1]);
+    let rawLength = raw.length;
+
+    let a = new Uint8Array(rawLength);
+    for (let i = 0; i < rawLength; ++i)
+    {
+        a[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([a], { type: contentType });
+  }
+  
+  /**
+   * Set the Face Analysis attributes.
+   */
+  function SetAnalyzeResults(gender, age, glasses, smile, emotion)
+  {
+    faceGender.text(gender);
+    faceAge.text(age);
+    faceGlasses.text(glasses);
+    faceSmile.text(smile);
+    faceEmotion.text(emotion);
+  }
+
+  /**
+   * Call the Azure Function 'Analyze' API.
+   */
+  function CallAnalyze()
+  {
+    SetAnalyzeResults("", "", "", "", "");
+
+    // Make a blob.
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+    let blob = makeBlobFromPictureUri(canvas.toDataURL('image/png'));
+
+    $.ajax(
+    {
+      url: "ANALYZEAPI_URL",
+      type: "POST",
+      headers :
+      {
+        "Content-Type" : "application/octet-stream"
+      },
+      processData : false,
+      data: blob,
+      success: function (data)
+      {
+        console.log("Analyze success");
+        data = JSON.parse(data);
+        SetAnalyzeResults(data.attributes.gender,
+                          data.attributes.age,
+                          data.attributes.glasses,
+                          data.attributes.smile,
+                          data.emotion);
+      }, 
+      error : function (r, s, e)
+      {
+        console.log("Analyze error : " + r + " | " + s + " | " + e);
+        SetAnalyzeResults("N/A", "N/A", "N/A", "N/A", "N/A");
+      } 
+    });
+  }
+  
+  /**
+   * Call the Azure Logic App 'Send Feedback' API.
+   */
+  function CallSendFeedback()
+  {
+    let data = {};
+    data.email = email.val();
+    data.feedback = feedback.val();
+    let str = JSON.stringify(data);
+    $.ajax(
+    {
+      url: "SENDFEEDBACKAPI_URL",
+      type: "POST",
+      headers :
+      {
+        "Content-Type" : "application/json"
+      },
+      processData : false,
+      data: str,
+      success: function (d)
+      {
+        alert("Feedback sent successfully, thanks !");
+        email.val("");
+        feedback.val("");
+      }, 
+      error : function (r, s, e)
+      {
+        alert("Error sending the feedback, sorry :(");
+      } 
+    });
+  }
+  
+  /**
+   * Map the "Take Picture" button.
+   */
+  startbutton.addEventListener('click', function(ev)
+  {
+  	CallAnalyze();
+    ev.preventDefault();
+  }, false);
+  
+  /**
+   * Map the "Send Feedback" button.
+   */
+  sendbutton.addEventListener('click', function(ev)
+  {
+  	CallSendFeedback();
+    ev.preventDefault();
+  }, false);
+  
+})();
+</script>
+</body>
+</html>
