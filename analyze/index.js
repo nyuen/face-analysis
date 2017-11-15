@@ -106,8 +106,17 @@ function CallCSApi(url, key, data, callback)
 }
 
 
-// Dev mode.
-if (process.env.NODE_ENV == "dev")
+// Non-Azure Functions host.
+if (process.env.NODE_HOST != "azure-function")
 {
-    module.exports({ done : function() { console.log("done() called"); } }, { body : { url : "http://www.afr.com/content/dam/images/g/u/9/f/4/6/image.related.afrArticleLead.620x350.gtf1i7.png/1486690175461.jpg" } });
+    require("http").createServer(function(req, res)
+    {
+        let context = 
+        {
+            done : function() { console.log("done() called"); },
+            res : res
+        };
+        module.exports(context, req);
+        res.end(res.body);
+    }).listen(8080);
 }
