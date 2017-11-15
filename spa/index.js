@@ -29,8 +29,8 @@ module.exports =  function (context, req)
 };
 
 
-// Dev mode.
-if (process.env.NODE_ENV == "dev")
+// Non-Azure Functions host.
+if (process.env.NODE_HOST != "azure-function")
 {
     require("http").createServer(function(req, res)
     {
