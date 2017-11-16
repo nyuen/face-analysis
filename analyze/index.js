@@ -108,4 +108,5 @@ function CallCSApi(url, key, data, callback)
       callback);
 }
 
-module.exports = require("./bootstrap.js")(process.env.NODE_HOST, Main, "POST");
+//module.exports = require("./bootstrap.js")(process.env.NODE_HOST, Main, "POST");
+module.exports = Main;
