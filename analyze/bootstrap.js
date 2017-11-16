@@ -34,7 +34,7 @@ function Localhost(handler, method)
 
 function AzureFunctions(handler, exports)
 {
-    exports = handler;
+    exports.entryPoint = handler;
 }
 
 module.exports = function(host, handler, method, exports)
