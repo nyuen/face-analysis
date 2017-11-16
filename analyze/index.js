@@ -108,4 +108,4 @@ function CallCSApi(url, key, data, callback)
       callback);
 }
 
-require("./bootstrap.js")(module, Main, "POST");
+require("./bootstrap.js")(module, process.env.NODE_HOST, Main, "POST");
