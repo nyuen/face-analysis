@@ -34,17 +34,17 @@ function Localhost(handler, method)
 
 function AzureFunctions(handler, exports)
 {
-    exports.entryPoint = handler;
+    return handler;
 }
 
-module.exports = function(host, handler, method, exports)
+module.exports = function(host, handler, method)
 {
     if (host == "localhost")
     {
-        Localhost(handler, method);
+        return Localhost(handler, method);
     }
     else if (host == "azure-functions")
     {
-        AzureFunctions(handler, exports);
+        return AzureFunctions(handler, exports);
     }
 };
