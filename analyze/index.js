@@ -7,7 +7,7 @@ const r = require("request");
 /**
  * Entry point.
  */
-module.exports = function (context, req)
+function Main(context, req)
 {
     AnalyzeEmotion({ context : context, data : req.body }, {}, AnalyzeFace);
 };
@@ -79,7 +79,10 @@ function AnalyzeFace(dataIn, dataOut, next)
  */
 function ReturnResponse(dataIn, dataOut)
 {
-    dataIn.context.res = {};
+    if (!dataIn.context.res)
+    {
+        dataIn.context.res = {};
+    }
     dataIn.context.res.status = 200;
     dataIn.context.res.headers = { "content-type" : "application/json" };
     dataIn.context.res.body = JSON.stringify(dataOut);
@@ -105,18 +108,4 @@ function CallCSApi(url, key, data, callback)
       callback);
 }
 
-
-// Non-Azure Functions host.
-if (process.env.NODE_HOST != "azure-function")
-{
-    require("http").createServer(function(req, res)
-    {
-        let context = 
-        {
-            done : function() { console.log("done() called"); },
-            res : res
-        };
-        module.exports(context, req);
-        res.end(res.body);
-    }).listen(8080);
-}
+require("./bootstrap.js")(module, Main, "POST");
