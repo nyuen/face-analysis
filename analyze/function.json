@@ -15,6 +15,5 @@
       "name": "res"
     }
   ],
-  "disabled": false,
-  "entryPoint" : "Main"
+  "disabled": false
 }

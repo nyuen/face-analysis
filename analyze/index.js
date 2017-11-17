@@ -7,7 +7,7 @@ const r = require("request");
 /**
  * Entry point.
  */
-function Main(context, req)
+module.exports = function(context, req)
 {
     AnalyzeEmotion({ context : context, data : req.body }, {}, AnalyzeFace);
 };
