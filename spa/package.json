@@ -10,6 +10,6 @@
   "author": "Olivier",
   "license": "ISC",
   "dependencies": {
-    "local-webstrap": "^1.0.1"
+    "local-webstrap": "^1.1.1"
   }
 }
