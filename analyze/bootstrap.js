@@ -1,7 +1,7 @@
 /**
  * Bootstrap an handler behind an ExpressJS web server.
  */
-function Localhost(handler, method)
+function run(handler, method)
 {
     // Setup callback.
     let wrapper = function(req, res)
@@ -32,24 +32,7 @@ function Localhost(handler, method)
     app.listen(8080);
 }
 
-function AzureFunctions(context, req)
+module.exports = function(handler, method)
 {
-    return module.exports._handler(context, req);
-}
-
-module.exports = {};
-module.exports.Localhost = Localhost;
-module.exports.AzureFunctions = AzureFunctions;
-
-module.exports.bootstrap = function(parent_module, host, handler, method)
-{
-    if (host == "localhost")
-    {
-        module.exports.Localhost(handler, method);
-    }
-    else if (host == "azure-functions")
-    {
-        module.exports._handler = handler;
-        parent_module.exports = module.exports.AzureFunctions;
-    }
+    run(handler, method);
 };
