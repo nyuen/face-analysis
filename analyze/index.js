@@ -2,6 +2,7 @@
  * Includes.
  */
 const r = require("request");
+const os = require("os");
 
 
 /**
@@ -85,6 +86,7 @@ function ReturnResponse(dataIn, dataOut)
     }
     dataIn.context.res.status = 200;
     dataIn.context.res.headers = { "content-type" : "application/json" };
+    dataOut.hostname = os.hostname();
     dataIn.context.res.body = JSON.stringify(dataOut);
     dataIn.context.done();
 }
