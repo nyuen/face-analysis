@@ -1,7 +1,7 @@
 /**
  * Bootstrap an handler behind an ExpressJS web server.
  */
-function run(handler, method)
+function RunLocalhost(handler, method)
 {
     // Setup callback.
     let wrapper = function(req, res)
@@ -32,7 +32,8 @@ function run(handler, method)
     app.listen(8080);
 }
 
-module.exports = function(handler, method)
+module.exports = function(host, handler, method)
 {
-    run(handler, method);
+    if (host == "localhost")
+        RunLocalhost(handler, method);
 };
