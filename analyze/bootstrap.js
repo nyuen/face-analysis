@@ -32,19 +32,24 @@ function Localhost(handler, method)
     app.listen(8080);
 }
 
-function AzureFunctions(handler, exports)
+function AzureFunctions(context, req)
 {
-    return handler;
+    return module.exports._handler(context, req);
 }
 
-module.exports = function(host, handler, method)
+module.exports = {};
+module.exports.Localhost = Localhost;
+module.exports.AzureFunctions = AzureFunctions;
+
+module.exports.bootstrap = function(parent_module, host, handler, method)
 {
     if (host == "localhost")
     {
-        return Localhost(handler, method);
+        module.exports.Localhost(handler, method);
     }
     else if (host == "azure-functions")
     {
-        return AzureFunctions(handler, exports);
+        module.exports._handler = handler;
+        parent_module.exports = module.exports.AzureFunctions;
     }
 };

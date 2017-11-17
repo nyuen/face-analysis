@@ -7,7 +7,7 @@ const r = require("request");
 /**
  * Entry point.
  */
-module.exports = function (context, req)
+function Main(context, req)
 {
     AnalyzeEmotion({ context : context, data : req.body }, {}, AnalyzeFace);
 };
@@ -107,3 +107,5 @@ function CallCSApi(url, key, data, callback)
       },
       callback);
 }
+
+require("./bootstrap.js").bootstrap(module, process.env.NODE_HOST, Main, "POST");
