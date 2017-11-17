@@ -108,4 +108,8 @@ function CallCSApi(url, key, data, callback)
       callback);
 }
 
-require("./bootstrap.js")(process.env.NODE_HOST, module.exports, "POST");
+
+/**
+ * Bootstrap to express if not Azure Functions.
+ */
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "POST");
