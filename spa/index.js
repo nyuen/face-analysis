@@ -29,17 +29,7 @@ module.exports =  function (context, req)
 };
 
 
-// Non-Azure Functions host.
-if (process.env.NODE_HOST != "azure-function")
-{
-    require("http").createServer(function(req, res)
-    {
-        let context = 
-        {
-            done : function() { console.log("done() called"); },
-            res : res
-        };
-        module.exports(context, req);
-        res.end(res.body);
-    }).listen(8080);
-}
+/**
+ * Bootstrap to express if not Azure Functions.
+ */
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET");
