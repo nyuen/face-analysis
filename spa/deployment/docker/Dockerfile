@@ -22,9 +22,9 @@ RUN npm install
 
 
 # DEFINE ENVIRONMENT VARIABLES
-ENV NODE_HOST           localhost
-ENV ANALYZEAPI_URL      URL_TO_ANALYZE_SERVICE
-ENV SENDFEEDBACKAPI_URL URL_TO_FEEDBACK_SERVICE
+# ANALYZEAPI_URL = should be passed at 'docker run' time
+# SENDFEEDBACKAPI_URL = should be passed at 'docker run' time
+ENV NODE_HOST localhost
 
 
 # STARTUP CONFIG

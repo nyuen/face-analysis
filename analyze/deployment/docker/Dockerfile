@@ -22,9 +22,9 @@ RUN npm install
 
 
 # DEFINE ENVIRONMENT VARIABLES
-ENV NODE_HOST           localhost
-ENV FACEAPI_KEY         AZURE_COGNITIVE_SERVICES_FACE_API_KEY
-ENV EMOTIONAPI_KEY      AZURE_COGNITIVE_SERVICES_EMOTION_API_KEY
+# FACEAPI_KEY = should be passed at 'docker run' time
+# ENV EMOTIONAPI_KEY = should be passed at 'docker run' time
+ENV NODE_HOST localhost
 
 
 # STARTUP CONFIG
