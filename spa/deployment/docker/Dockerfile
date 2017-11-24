@@ -13,6 +13,7 @@ RUN rm -f package.json
 RUN rm -f README.md
 
 WORKDIR spa
+RUN cp ./deployment/cert/*.* ./
 RUN rm -rf ./deployment
 RUN rm -f function.json
 
