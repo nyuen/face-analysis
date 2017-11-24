@@ -28,5 +28,5 @@ ENV NODE_HOST localhost
 
 
 # STARTUP CONFIG
-EXPOSE 8080
+EXPOSE 443
 CMD ["npm", "start"]

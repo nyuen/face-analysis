@@ -32,4 +32,4 @@ module.exports =  function (context, req)
 /**
  * Bootstrap to express if not Azure Functions.
  */
-require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET", 8080);
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET", 443);
