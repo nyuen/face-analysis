@@ -10,7 +10,11 @@ const os = require("os");
  */
 module.exports = function(context, req)
 {
+    console.log("Entering function");
+
     AnalyzeEmotion({ context : context, data : req.body }, {}, AnalyzeFace);
+
+    console.log("Terminated !");
 };
 
 
@@ -114,4 +118,4 @@ function CallCSApi(url, key, data, callback)
 /**
  * Bootstrap to express if not Azure Functions.
  */
-require("local-webstrap")(process.env.NODE_HOST, module.exports, "POST", 443);
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "POST", 8080, false);
