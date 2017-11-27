@@ -1,7 +1,0 @@
-{
-    "scripts" :
-    {
-        "git push"  : "git push origin master",
-        "git pull"  : "git pull"
-    }
-}
