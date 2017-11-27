@@ -6,6 +6,8 @@ WORKDIR /app
 # ADD FILES
 ADD index.js ./
 ADD package.json ./
+WORKDIR deployment/cert
+ADD ./deployment/cert/*.* ./
 
 
 # INSTALL DEPENDENCIES
@@ -13,6 +15,7 @@ RUN npm install
 
 
 # SHOW DIRECTORY
+WORKDIR /app
 RUN ls -l
 
 
@@ -23,5 +26,5 @@ ENV NODE_HOST localhost
 
 
 # STARTUP CONFIG
-EXPOSE 8080
+EXPOSE 8443
 CMD ["npm", "start"]
