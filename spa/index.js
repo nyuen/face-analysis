@@ -22,7 +22,11 @@ module.exports =  function (context, req)
     page = page.replace("SENDFEEDBACKAPI_URL", process.env.SENDFEEDBACKAPI_URL);
 
     // Serve the page.
-    context.res.headers = { "content-type" : "text/html" };
+    context.res.headers =
+    {
+        "content-type" : "text/html",
+        "Access-Control-Allow-Origin" : "*"
+    };
     context.res.status = 200;
     context.res.body = page;
     context.done();
@@ -32,4 +36,6 @@ module.exports =  function (context, req)
 /**
  * Bootstrap to express if not Azure Functions.
  */
-require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET", 443);
+let certpath = require("path").join(__dirname, "/deployment/cert");
+console.log("Certificate path set to " + certpath);
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET", 8443, true, certpath);

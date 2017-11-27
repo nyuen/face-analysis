@@ -5,11 +5,23 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "git push": "git push origin master",
+    "git pull": "git pull",
+    "aci create": ".\\deployment\\azure\\aci\\create.bat",
+    "aci delete": ".\\deployment\\azure\\aci\\delete.bat",
+    "aci logs": ".\\deployment\\azure\\aci\\logs.bat",
+    "aci status": ".\\deployment\\azure\\aci\\status.bat",
+    "acr push": ".\\deployment\\azure\\acr\\push.bat",
+    "acr delete": ".\\deployment\\azure\\acr\\delete.bat",
+    "docker image build": ".\\deployment\\docker\\build.bat",
+    "docker image delete": ".\\deployment\\docker\\delete.bat",
+    "docker container run": ".\\deployment\\docker\\run.bat",
+    "docker container stop": ".\\deployment\\docker\\stop.bat"
   },
   "author": "Olivier",
   "license": "ISC",
   "dependencies": {
-    "local-webstrap": "^1.2.0"
+    "local-webstrap": "^1.3.7"
   }
 }

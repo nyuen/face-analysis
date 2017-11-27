@@ -1,25 +1,23 @@
 # SETUP BASELINE + GET CODE
-FROM node:8.7.0-wheezy
+FROM node:8.7.0-slim
 WORKDIR /app
-RUN git clone https://github.com/olileger/face-analysis.git .
 
 
-# REMOVE USELESS FILES
-RUN rm -rf ./.git
-RUN rm -rf ./analyze
-RUN rm -f .gitignore
-RUN rm -f host.json
-RUN rm -f package.json
-RUN rm -f README.md
-
-WORKDIR spa
-RUN cp ./deployment/cert/*.* ./
-RUN rm -rf ./deployment
-RUN rm -f function.json
+# ADD FILES
+ADD form.html ./
+ADD index.js ./
+ADD package.json ./
+WORKDIR deployment/cert
+ADD ./deployment/cert/*.* ./
 
 
 # INSTALL DEPENDENCIES
 RUN npm install
+
+
+# SHOW DIRECTORY
+WORKDIR /app
+RUN ls -l
 
 
 # DEFINE ENVIRONMENT VARIABLES
@@ -29,5 +27,5 @@ ENV NODE_HOST localhost
 
 
 # STARTUP CONFIG
-EXPOSE 443
+EXPOSE 8443
 CMD ["npm", "start"]
