@@ -13,5 +13,5 @@ az container create ^
   --resource-group %RG_NAME% --name "%ACI_NAME%" ^
   --image %REGISTRY_URL%/%IMAGE_NAME% --registry-login-server %REGISTRY_URL% --registry-username %REGISTRY_NAME% --registry-password %REGISTRY_PASSWD% ^
   --location "west europe" --cpu 1 --memory 1 ^
-  --ports 8080 --ip-address "public" ^
+  --ports 8443 --ip-address "public" ^
   --environment-variables FACEAPI_KEY=%FACEAPI_KEY% EMOTIONAPI_KEY=%EMOTIONAPI_KEY%
