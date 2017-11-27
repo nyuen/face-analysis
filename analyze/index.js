@@ -89,7 +89,11 @@ function ReturnResponse(dataIn, dataOut)
         dataIn.context.res = {};
     }
     dataIn.context.res.status = 200;
-    dataIn.context.res.headers = { "content-type" : "application/json" };
+    dataIn.context.res.headers =
+    {
+        "content-type" : "application/json",
+        "Access-Control-Allow-Origin" : "*"
+    };
     dataOut.hostname = os.hostname();
     dataIn.context.res.body = JSON.stringify(dataOut);
     dataIn.context.done();
@@ -118,4 +122,6 @@ function CallCSApi(url, key, data, callback)
 /**
  * Bootstrap to express if not Azure Functions.
  */
-require("local-webstrap")(process.env.NODE_HOST, module.exports, "POST", 8080, false);
+let certpath = require("path").join(__dirname, "/deployment/cert");
+console.log("Certificate path set to " + certpath);
+require("local-webstrap")(process.env.NODE_HOST, module.exports, "POST", 8443, true, certpath);
