@@ -5,6 +5,7 @@ WORKDIR /app
 
 # ADD FILES
 ADD index.js ./
+ADD wrapper.js ./
 ADD package.json ./
 WORKDIR deployment/cert
 ADD ./deployment/cert/*.* ./
@@ -14,17 +15,6 @@ ADD ./deployment/cert/*.* ./
 RUN npm install
 
 
-# SHOW DIRECTORY
-WORKDIR /app
-RUN ls -l
-
-
-# DEFINE ENVIRONMENT VARIABLES
-# FACEAPI_KEY = should be passed at 'docker run' time
-# ENV EMOTIONAPI_KEY = should be passed at 'docker run' time
-ENV NODE_HOST localhost
-
-
 # STARTUP CONFIG
-EXPOSE 8443
+EXPOSE 8888
 CMD ["npm", "start"]

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node wrapper.js",
     "git push": "git push origin master",
     "git pull": "git pull",
     "aci create": ".\\deployment\\azure\\aci\\create.bat",
@@ -22,7 +22,7 @@
   "author": "Olivier",
   "license": "ISC",
   "dependencies": {
-    "local-webstrap": "^1.3.7",
+    "local-webstrap": "^1.4.0",
     "request": "^2.82.0"
   }
 }
