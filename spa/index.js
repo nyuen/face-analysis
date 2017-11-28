@@ -31,11 +31,3 @@ module.exports =  function (context, req)
     context.res.body = page;
     context.done();
 };
-
-
-/**
- * Bootstrap to express if not Azure Functions.
- */
-let certpath = require("path").join(__dirname, "/deployment/cert");
-console.log("Certificate path set to " + certpath);
-require("local-webstrap")(process.env.NODE_HOST, module.exports, "GET", 8443, true, certpath);
